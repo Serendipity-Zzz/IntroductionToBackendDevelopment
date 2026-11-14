@@ -1,0 +1,24 @@
+-- 先选择自己的课堂数据库，再执行本文件。
+CREATE TABLE IF NOT EXISTS users (
+ id BIGINT PRIMARY KEY AUTO_INCREMENT,
+ username VARCHAR(32) NOT NULL UNIQUE,
+ display_name VARCHAR(50) NOT NULL,
+ password_hash VARCHAR(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS events (
+ id BIGINT PRIMARY KEY,
+ title VARCHAR(100) NOT NULL,
+ capacity INT NOT NULL,
+ CONSTRAINT chk_capacity CHECK (capacity > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS registrations (
+ id BIGINT PRIMARY KEY AUTO_INCREMENT,
+ event_id BIGINT NOT NULL,
+ user_id BIGINT NOT NULL,
+ created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_registration_event FOREIGN KEY (event_id) REFERENCES events(id),
+ CONSTRAINT fk_registration_user FOREIGN KEY (user_id) REFERENCES users(id),
+ CONSTRAINT uk_event_user UNIQUE (event_id,user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -1,0 +1,20 @@
+server:
+  address: 127.0.0.1
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: signup-classroom
+  datasource:
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:signup_demo}?characterEncoding=UTF-8&connectionTimeZone=LOCAL
+    username: ${DB_USER:workshop}
+    password: ${DB_PASSWORD:}
+    hikari:
+      connection-timeout: 3000
+      initialization-fail-timeout: -1
+  sql:
+    init:
+      mode: ${DB_INIT:always}
+      encoding: UTF-8
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true

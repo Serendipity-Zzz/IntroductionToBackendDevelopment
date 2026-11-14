@@ -1,0 +1,1109 @@
+html<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>报名系统 · 开发文档</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:25px}body{margin:0;color:#17364d;background:#f5f7f9;font:16px/1.9 "Microsoft YaHei",sans-serif}a{color:#28649c;text-underline-offset:4px}aside{position:fixed;left:0;top:0;bottom:0;width:265px;padding:28px 22px;overflow:auto;background:white;border-right:1px solid #dce5ed}aside strong{display:block;font-size:20px;margin-bottom:20px}aside a{display:block;text-decoration:none;font-size:13px;margin:12px 0}main{margin-left:265px;max-width:1250px;padding:35px 45px}section{padding:25px 32px 40px;margin-bottom:35px;background:white;border:1px solid #dce5ed;scroll-margin-top:25px}h1{font-size:30px;margin:0 0 24px}h2{font-size:23px;margin-top:32px}h3{font-size:19px}p,li{overflow-wrap:anywhere}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.8}th,td{padding:12px;border-bottom:1px solid #dce5ed;text-align:left;vertical-align:top}th{background:#edf3f8}pre{padding:20px;background:#f1f5f8;overflow:auto;font:14px/1.75 Consolas,monospace}code{font-family:Consolas,"Microsoft YaHei",monospace}p code,li code{background:#eef3f7;padding:2px 4px}.table-wrap{overflow:auto}a:focus-visible{outline:3px solid #2e7a91;outline-offset:3px}@media(max-width:850px){aside{position:static;width:auto;border:0}main{margin:0;padding:12px}section{padding:23px 18px}h1{font-size:25px}table{min-width:600px}}@media print{aside{display:none}main{margin:0;padding:0;max-width:none}section{border:0;break-before:page;padding:0}section:first-child{break-before:auto}pre{white-space:pre-wrap}}</style></head><body><aside><strong>报名系统开发文档</strong><a href="#doc-0">00 报名系统开发文档</a><a href="#doc-1">01 需求规格与验收标准</a><a href="#doc-2">02 系统设计说明</a><a href="#doc-3">03 数据库设计与变更说明</a><a href="#doc-4">04 接口设计与错误码</a><a href="#doc-5">05 开发规范与任务拆分</a><a href="#doc-6">06 测试计划与验证记录</a><a href="#doc-7">07 评审发布与维护手册</a><a href="#doc-8">08 追踪矩阵与现状差距</a><a href="09_接口契约.openapi.json">完整OpenAPI</a><a href="10_源码基线.json">源码基线</a></aside><main><section><h2>当前例会：三个版本与接口实操</h2><a href="11_三种版本与课堂主线.md">查看三种版本、8080主线与新增接口说明</a><p>共同实操使用完整工程；下面的数据库结构、SQL和原练习步骤保留为开发参考，不要求现场逐条完成。</p></section><section id="doc-0"><h1>报名系统开发文档</h1>
+<p>本目录依据2026年10月31日的完整工程逆向整理，覆盖需求、设计、开发、测试和发布维护。它展示一个成品项目应当留下哪些工程资料，便于课堂按开发流程逐项对照。</p>
+<p>基线是<a href="../%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B/%E5%89%8D%E5%90%8E%E7%AB%AF/backend/README.md">完整工程</a>，包含账号注册、登录、活动查询、报名和本人记录查询，以及本机5500端口前端的跨域联调配置。pom.xml中的版本仍为1.0.0；为避免同版本下不同代码混淆，具体文件哈希见<a href="10_%E6%BA%90%E7%A0%81%E5%9F%BA%E7%BA%BF.json">源码基线</a>。</p>
+<h2>按开发顺序阅读</h2>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>文档</th>
+<th>在本项目中解决的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>明确需求</td>
+<td><a href="01_%E9%9C%80%E6%B1%82%E8%A7%84%E6%A0%BC%E4%B8%8E%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86.md">01 需求规格与验收标准</a></td>
+<td>谁能报名、重复怎么办、最后一个名额如何分配</td>
+</tr>
+<tr>
+<td>系统设计</td>
+<td><a href="02_%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E8%AF%B4%E6%98%8E.md">02 系统设计说明</a></td>
+<td>网页、接口、Java组件和MySQL怎样协作</td>
+</tr>
+<tr>
+<td>数据设计</td>
+<td><a href="03_%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%8F%98%E6%9B%B4%E8%AF%B4%E6%98%8E.md">03 数据库设计与变更说明</a></td>
+<td>三张表、约束、种子数据与注册功能升级</td>
+</tr>
+<tr>
+<td>接口设计</td>
+<td><a href="04_%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1%E4%B8%8E%E9%94%99%E8%AF%AF%E7%A0%81.md">04 接口设计与错误码</a></td>
+<td>调用地址、身份、字段、状态与错误码</td>
+</tr>
+<tr>
+<td>编写与协作</td>
+<td><a href="05_%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83%E4%B8%8E%E4%BB%BB%E5%8A%A1%E6%8B%86%E5%88%86.md">05 开发规范与任务拆分</a></td>
+<td>代码放在哪里、怎样拆任务、提交与评审检查什么</td>
+</tr>
+<tr>
+<td>联调与测试</td>
+<td><a href="06_%E6%B5%8B%E8%AF%95%E8%AE%A1%E5%88%92%E4%B8%8E%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95.md">06 测试计划与验证记录</a></td>
+<td>正常、异常、并发和重启场景怎样验收</td>
+</tr>
+<tr>
+<td>评审发布维护</td>
+<td><a href="07_%E8%AF%84%E5%AE%A1%E5%8F%91%E5%B8%83%E4%B8%8E%E7%BB%B4%E6%8A%A4%E6%89%8B%E5%86%8C.md">07 评审发布与维护手册</a></td>
+<td>构建、配置、数据库变更、启动、回退和查日志</td>
+</tr>
+<tr>
+<td>核对覆盖范围</td>
+<td><a href="08_%E8%BF%BD%E8%B8%AA%E7%9F%A9%E9%98%B5%E4%B8%8E%E7%8E%B0%E7%8A%B6%E5%B7%AE%E8%B7%9D.md">08 追踪矩阵与现状差距</a></td>
+<td>每条规则在哪实现、怎样验证，哪些能力尚未建设</td>
+</tr>
+</tbody>
+</table>
+<h2>可直接使用的附件</h2>
+<ul>
+<li><a href="09_%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6.openapi.json">09 完整接口契约</a>：按当前完整工程的10个HTTP入口整理，可导入Apifox；与课上分阶段导入的基础文件分开保存。</li>
+<li><a href="10_%E6%BA%90%E7%A0%81%E5%9F%BA%E7%BA%BF.json">10 源码基线</a>：源码、SQL、配置与前端文件的SHA256，便于确认文档对应哪份代码。</li>
+<li><code>验证记录/</code>：复制已有验证结果，标明原日期和范围，避免清理work后证据丢失。</li>
+</ul>
+<p>文中“已实现”以源码为依据；“历史验证”指已有测试记录；开发协作和发布检查中给出的是建议执行的规范，不表示已有真实团队评审、生产发布或自动化流水线。本次核对更新了材料路径和操作说明。历史验证记录保留原日期；2026年11月13日的材料检查没有重跑本机MySQL业务测试。</p>
+<p>本次分发包含项目工程/纯前端版、项目工程/内存后端版和项目工程/前后端。文中旧SQL填空练习工程属于历史教学方案，本material不附带该工程。当前实操在前后端/backend完成，前端使用前后端/fronted。</p>
+<ul>
+<li><a href="11_%E4%B8%89%E7%A7%8D%E7%89%88%E6%9C%AC%E4%B8%8E%E8%AF%BE%E5%A0%82%E4%B8%BB%E7%BA%BF.md">三种版本与课堂主线</a>：当前例会使用完整工程，SQL部分作为拓展。</li>
+</ul>
+</section><section id="doc-1"><h1>需求规格与验收标准</h1>
+<h2>目标与范围</h2>
+<p>让用户注册或使用演示账号登录，查看活动容量，提交一次报名，并查询自己的记录。多个用户争抢同一活动时不能超卖；关闭网页或重启Java后，已提交的账号与报名仍保留在MySQL。</p>
+<p>当前系统服务于本机教学，包含普通用户和负责准备环境、导入SQL的讲师。没有独立管理员权限或管理后台；讲师操作数据库不等于系统实现了管理员角色。</p>
+<h2>业务需求</h2>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>规则与已实现行为</th>
+<th>验收标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R01</td>
+<td>注册账号，用户名归一化为小写并保持唯一</td>
+<td>合法注册201；大小写等价账号不能重复注册，返回409 USERNAME_TAKEN</td>
+</tr>
+<tr>
+<td>R02</td>
+<td>新账号密码8至64字符，UTF-8不超过72字节；称呼非空且最多32字符</td>
+<td>短密码、空称呼或超限输入400；库中只存BCrypt哈希，响应不含密码或哈希</td>
+</tr>
+<tr>
+<td>R03</td>
+<td>注册后独立登录，凭证有效期7200秒</td>
+<td>注册响应无token；正确登录200，错误密码401；重启服务后重新登录</td>
+</tr>
+<tr>
+<td>R04</td>
+<td>活动查询需要有效登录，显示容量、报名数、余量和本人的报名ID</td>
+<td>已知活动200；未登录401；不存在的活动404 EVENT_NOT_FOUND</td>
+</tr>
+<tr>
+<td>R05</td>
+<td>报名身份来自后端登录态</td>
+<td>报名正文为{}；不能通过附带userId替别人报名，未知正文字段400</td>
+</tr>
+<tr>
+<td>R06</td>
+<td>同一用户同一活动只能有一条报名</td>
+<td>首次201；重复409 ALREADY_REGISTERED，记录数不增加</td>
+</tr>
+<tr>
+<td>R07</td>
+<td>活动报名总量不能超过capacity</td>
+<td>容量1、初始无报名时两名用户并发，恰好一个201、一个409 EVENT_FULL，数据库只新增一行</td>
+</tr>
+<tr>
+<td>R08</td>
+<td>用户只能查询自己的报名</td>
+<td>本人按ID查200；另一账号查同一ID返回404 REGISTRATION_NOT_FOUND</td>
+</tr>
+<tr>
+<td>R09</td>
+<td>可查自己的全部报名，以及自己在指定活动的报名</td>
+<td>列表只含本人记录，按ID倒序；未报名的活动查询返回404</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>账号与报名持久保存，登录会话临时保存</td>
+<td>Java重启后旧token无效，重新登录后仍能找到原账号与报名</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>支持本机独立前端联调</td>
+<td>5500来源可按配置访问/api；未配置的5501来源不能跨域调用；同源网页正常使用</td>
+</tr>
+</tbody>
+</table>
+<p>用户名注册规则是去掉首尾空白、转小写后满足<code>[a-z][a-z0-9_]{2,31}</code>。演示账号zhh、myh的密码demo123属于既有种子数据，允许继续登录；不能据此认为新注册也接受7字符密码。</p>
+<h2>主要用户流程</h2>
+<ol>
+<li>用户注册，或选择已有演示账号。</li>
+<li>登录取得token，后续请求使用Authorization头。</li>
+<li>查询活动；提交报名时由服务端重新检查身份、重复和容量。</li>
+<li>成功后得到报名ID，查询记录并在网页显示。</li>
+<li>退出时删除当前token；关闭页面后再登录，可以查回持久化记录。</li>
+</ol>
+<h2>边界与约定</h2>
+<ul>
+<li>重复和满员同时成立时，先返回“已报名”，因为实现先检查本人记录。</li>
+<li>页面显示的余量只供展示，不是预留名额；提交时必须重新判断。</li>
+<li>活动由种子SQL准备，没有活动新增、修改、取消、支付、候补或报名撤销API。</li>
+<li>不提供找回密码、邮箱验证、账号禁用、Redis会话、JWT、自动刷新token或多实例一致性会话。</li>
+</ul>
+<h2>最小验收材料</h2>
+<p>保留注册与登录响应、一次报名201、重复与满员各一次409、本人和他人查询结果、数据库对应行，以及两账号并发结果。样例ID可以写成57，正式验收应使用接口真实返回的ID。</p>
+<p>验收用例与已有记录见<a href="06_%E6%B5%8B%E8%AF%95%E8%AE%A1%E5%88%92%E4%B8%8E%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95.md">测试计划</a>，需求到源码的对应见<a href="08_%E8%BF%BD%E8%B8%AA%E7%9F%A9%E9%98%B5%E4%B8%8E%E7%8E%B0%E7%8A%B6%E5%B7%AE%E8%B7%9D.md">追踪矩阵</a>。</p>
+</section><section id="doc-2"><h1>系统设计说明</h1>
+<h2>运行结构</h2>
+<pre><code class="language-text">同源网页（Java提供静态文件） ─┐
+独立前端（本机5500）        ├─ HTTP / JSON ─ Java服务 ─ JDBC / SQL ─ MySQL
+Apifox                     ┘
+</code></pre>
+<p>Java服务由Spring Boot启动，内部用Spring MVC路由请求、Bean Validation校验字段、JdbcTemplate访问数据库。密码处理只使用spring-security-crypto；项目没有引入完整Spring Security Web鉴权链。</p>
+<p>浏览器、Java、MySQL是不同职责。Controller、Service和Repository是同一Java程序内的组件，不是三台服务器。</p>
+<h2>组件与职责</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>当前职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SignupApplication</td>
+<td>启动Spring Boot应用</td>
+</tr>
+<tr>
+<td>SignupController</td>
+<td>健康检查、注册登录退出、活动与报名查询、创建报名</td>
+</tr>
+<tr>
+<td>MyRegistrationController</td>
+<td>查询本人在指定活动的报名，传入eventId与登录userId</td>
+</tr>
+<tr>
+<td>AuthService</td>
+<td>注册规则、BCrypt、UUID token、会话到期与登录身份解析</td>
+</tr>
+<tr>
+<td>SignupService</td>
+<td>活动检查、重复与容量判断、报名事务、本人查询</td>
+</tr>
+<tr>
+<td>SignupRepository</td>
+<td>参数化SQL、行锁、关联查询、自增ID回取</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>请求与响应record，输入约束和账号归一化</td>
+</tr>
+<tr>
+<td>ApiErrorHandler</td>
+<td>业务与常见框架异常转换为状态码和错误JSON</td>
+</tr>
+<tr>
+<td>RequestLogFilter</td>
+<td>每请求生成requestId，记录API方法、路径、状态和耗时</td>
+</tr>
+<tr>
+<td>LocalFrontendCorsConfig</td>
+<td>本机5500前端跨域配置</td>
+</tr>
+</tbody>
+</table>
+<h2>报名事务</h2>
+<p><code>SignupService.register</code>由Controller通过Spring管理的Service调用，方法声明<code>@Transactional(isolation=READ_COMMITTED)</code>。</p>
+<pre><code class="language-text">校验正整数活动ID
+  → SELECT活动行FOR UPDATE（不存在则404）
+  → 查当前用户是否已经报名（是则409 ALREADY_REGISTERED）
+  → COUNT活动报名，与capacity比较（满则409 EVENT_FULL）
+  → INSERT(event_id,user_id)，取得生成的报名ID
+  → 查回本人记录，事务提交后返回201
+</code></pre>
+<p>所有创建报名的请求都先锁同一活动行，使该活动的检查与写入按事务顺序进行。唯一键再限制同一用户重复，外键确保引用的用户和活动存在。只加唯一键不能限制活动总容量；只把按钮置灰也不能防止另一浏览器同时提交。</p>
+<p>API没有提供修改活动容量的入口。若直接用SQL修改数据或绕过这条事务插入记录，属于额外操作，不应据此假定应用仍能保证全部业务规则。</p>
+<h2>登录与权限</h2>
+<p>登录成功时创建随机UUID字符串，映射到用户ID与绝对到期时间。映射放在进程内的ConcurrentHashMap，默认7200秒到期，不自动续期。多次登录会得到多个token；退出只删除指定的token。</p>
+<p>受保护的业务方法调用<code>AuthService.require</code>，由token取用户，而不是接收客户端指定的用户ID。查询SQL还带user_id条件，查不到本人的记录时返回404。</p>
+<p>退出接口只检查Bearer头是否存在且非空，不验证token仍在会话表中；已失效但格式正确的token再次退出也可204。这与查询接口要求有效会话不同。</p>
+<h2>数据保存范围</h2>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>保存内容</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MySQL</td>
+<td>账号、哈希、活动、报名</td>
+<td>Java或页面重启后保留</td>
+</tr>
+<tr>
+<td>Java内存</td>
+<td>token到用户与到期时间的映射</td>
+<td>服务重启清空</td>
+</tr>
+<tr>
+<td>网页sessionStorage</td>
+<td>后端版的登录token</td>
+<td>当前浏览器标签页会话；不保存报名数据库</td>
+</tr>
+<tr>
+<td>纯前端localStorage</td>
+<td>新注册的本机演示账号校验信息</td>
+<td>当前浏览器保留，不跨浏览器共享</td>
+</tr>
+<tr>
+<td>纯前端页面内存</td>
+<td>报名记录</td>
+<td>刷新或关页丢失</td>
+</tr>
+</tbody>
+</table>
+<h2>跨域与错误边界</h2>
+<p>仅<code>/api/**</code>允许来自<code>http://127.0.0.1:5500</code>及<code>http://localhost:5500</code>的GET、POST、OPTIONS。允许Content-Type与Authorization请求头，暴露Location和X-Request-Id，预检缓存3600秒。没有放开任意来源，也不使用跨域Cookie登录。</p>
+<p>错误处理器负责控制器异常JSON；被CORS等框架层直接拒绝的请求，不保证遵循同一JSON结构。活动显示由多次查询组合，提交时仍以事务内结果为准。</p>
+</section><section id="doc-3"><h1>数据库设计与变更说明</h1>
+<p>DDL以<a href="../%E9%A1%B9%E7%9B%AE%E5%B7%A5%E7%A8%8B/%E5%89%8D%E5%90%8E%E7%AB%AF/backend/sql/01_schema.sql">01_schema.sql</a>为准。三张表使用InnoDB、utf8mb4、utf8mb4_0900_ai_ci。完整工程默认库signup_demo，练习工程默认signup_lab。</p>
+<h2>字段字典</h2>
+<h3>users</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型与空值</th>
+<th>约束与用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGINT，非空</td>
+<td>主键、自增；新建库中zhh、myh通常为3、4，已有库以查询为准</td>
+</tr>
+<tr>
+<td>username</td>
+<td>VARCHAR(32)，非空</td>
+<td>唯一用户名，应用写入前去首尾空白并转小写</td>
+</tr>
+<tr>
+<td>display_name</td>
+<td>VARCHAR(50)，非空</td>
+<td>显示称呼；注册API限制最多32字符</td>
+</tr>
+<tr>
+<td>password_hash</td>
+<td>VARCHAR(100)，非空</td>
+<td>BCrypt哈希；不向API返回</td>
+</tr>
+</tbody>
+</table>
+<h3>events</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型与空值</th>
+<th>约束与用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGINT，非空</td>
+<td>主键；由课堂SQL指定，非自增</td>
+</tr>
+<tr>
+<td>title</td>
+<td>VARCHAR(100)，非空</td>
+<td>活动名称</td>
+</tr>
+<tr>
+<td>capacity</td>
+<td>INT，非空</td>
+<td>CHECK capacity &gt; 0</td>
+</tr>
+</tbody>
+</table>
+<h3>registrations</h3>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型与空值</th>
+<th>约束与用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGINT，非空</td>
+<td>主键、自增，可能跳号</td>
+</tr>
+<tr>
+<td>event_id</td>
+<td>BIGINT，非空</td>
+<td>外键fk_registration_event，关联events.id</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>BIGINT，非空</td>
+<td>外键fk_registration_user，关联users.id</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>DATETIME，非空</td>
+<td>默认CURRENT_TIMESTAMP；响应为无时区偏移的本地日期时间</td>
+</tr>
+</tbody>
+</table>
+<p>联合唯一约束<code>uk_event_user(event_id,user_id)</code>禁止同一用户重复报名。没有配置级联删除；有关联报名时，不能直接删掉被引用的用户或活动。</p>
+<h2>关系</h2>
+<p>一个用户可以有多条报名，一场活动可以有多条报名。registrations把两者关联起来。活动容量不是报名表的行数上限约束，由应用事务判断。</p>
+<pre><code class="language-sql">SELECT r.id, u.username, e.title, r.created_at
+FROM registrations r
+JOIN users u ON u.id = r.user_id
+JOIN events e ON e.id = r.event_id
+WHERE r.event_id = 10;
+</code></pre>
+<h2>数据与脚本职责</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+<th>执行身份或时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00_准备数据库.sql</td>
+<td>建两个课堂库及workshop权限；替换密码占位符</td>
+<td>自己的MySQL管理员</td>
+</tr>
+<tr>
+<td>01_schema.sql</td>
+<td>三张表、主外键及唯一约束</td>
+<td>完整工程自动初始化，练习工程手工执行</td>
+</tr>
+<tr>
+<td>02_seed.sql</td>
+<td>zhh、myh及活动1、10</td>
+<td>建表后执行；INSERT IGNORE保留已有行</td>
+</tr>
+<tr>
+<td>03_已有数据库启用注册.sql</td>
+<td>将旧users.id升级成AUTO_INCREMENT</td>
+<td>老课堂库由管理员显式执行</td>
+</tr>
+<tr>
+<td>90_重置开场活动.sql</td>
+<td>清理活动1报名</td>
+<td>在确认过的课堂库中演示前执行</td>
+</tr>
+<tr>
+<td>91_重置接口练习.sql</td>
+<td>清理活动10报名</td>
+<td>需要重新练习首次201时执行</td>
+</tr>
+</tbody>
+</table>
+<p>活动1容量1，活动10容量3。种子密码demo123只用于演示，数据库保存对应哈希。初始化脚本不会每次重置报名，也不会自动替换已有用户名对应的密码。</p>
+<h2>旧库升级注册功能</h2>
+<p><code>CREATE TABLE IF NOT EXISTS</code>不会修改已经存在的表。旧版users.id没有自增时，启动新程序仍可能登录，但注册插入会失败。</p>
+<ol>
+<li>确认要升级的是自己的signup_demo或signup_lab，并备份这次课堂数据。</li>
+<li>管理员连接选中对应库，先执行SELECT DATABASE()。</li>
+<li>执行03脚本，给users.id增加AUTO_INCREMENT，保留原ID、账号与报名。</li>
+<li>检查SHOW COLUMNS FROM users LIKE 'id'包含auto_increment；注册一个新账号并确认ID不覆盖既有账号。</li>
+<li>确认原账号能登录、原报名仍在，错误外键引用仍被拒绝。</li>
+</ol>
+<p>脚本临时关闭当前连接的FOREIGN_KEY_CHECKS，并恢复原值；若客户端在ALTER错误后停止，重新连接或按脚本提示恢复检查。workshop默认没有ALTER权限，不能用它代替管理员做这一步。</p>
+<p>当前没有Flyway/Liquibase或自动版本化迁移。后续变更应新增编号SQL，写明备份、执行、验证和回退办法，不通过删库重建来升级已有数据。</p>
+<p>演示账号现统一使用zhh、myh，密码均为demo123。旧账号保留。新建库中两个新账号的用户ID通常为3、4；已有库的编号可能不同，以登录响应user.id或按用户名查询的结果为准。旧库先在所用课堂库执行sql/04_新增演示账号.sql；如users.id尚未自增，先执行03升级脚本。</p>
+</section><section id="doc-4"><h1>接口设计与错误码</h1>
+<p>机器可读契约见<a href="09_%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6.openapi.json">完整OpenAPI</a>。以下描述当前完整工程，默认地址为http://127.0.0.1:8080；连接练习服务时通常改为8081。</p>
+<h2>通用约定</h2>
+<ul>
+<li>请求和响应使用JSON；退出成功为204，没有正文。</li>
+<li>业务接口通过<code>Authorization: Bearer &lt;token&gt;</code>传递身份。token是不透明UUID字符串，不是JWT。</li>
+<li>每次请求由服务生成X-Request-Id，业务错误正文也含requestId。不要把这个追踪ID当用户、活动或报名ID。</li>
+<li>报名成功返回201，并带相对Location <code>/api/registrations/{id}</code>；注册账号返回201但不签发token，也没有该Location。</li>
+<li>未知JSON正文字段会因配置被拒绝。路径ID须能解析为long，业务ID还须大于0。</li>
+<li>示例账号、token和报名ID只帮助理解；串联接口时使用真实响应值。</li>
+</ul>
+<h2>入口清单</h2>
+<table>
+<thead>
+<tr>
+<th>方法与路径</th>
+<th>身份要求</th>
+<th>输入</th>
+<th>成功结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET /health</td>
+<td>无</td>
+<td>无</td>
+<td>200，status=ok；不访问数据库</td>
+</tr>
+<tr>
+<td>POST /api/auth/register</td>
+<td>无</td>
+<td>username、displayName、password</td>
+<td>201，PublicUser</td>
+</tr>
+<tr>
+<td>POST /api/auth/login</td>
+<td>无</td>
+<td>username、password</td>
+<td>200，token、user、expiresInSeconds</td>
+</tr>
+<tr>
+<td>POST /api/auth/logout</td>
+<td>非空Bearer头</td>
+<td>无正文</td>
+<td>204，删除对应token；不要求该token仍有效</td>
+</tr>
+<tr>
+<td>GET /api/me</td>
+<td>有效token</td>
+<td>无</td>
+<td>200，PublicUser</td>
+</tr>
+<tr>
+<td>GET /api/events/{eventId}</td>
+<td>有效token</td>
+<td>正整数活动ID</td>
+<td>200，Event</td>
+</tr>
+<tr>
+<td>POST /api/events/{eventId}/registrations</td>
+<td>有效token</td>
+<td>正整数活动ID，JSON {}</td>
+<td>201，Registration</td>
+</tr>
+<tr>
+<td>GET /api/registrations/{registrationId}</td>
+<td>有效token</td>
+<td>正整数报名ID</td>
+<td>200，本人的Registration</td>
+</tr>
+<tr>
+<td>GET /api/me/registrations</td>
+<td>有效token</td>
+<td>无</td>
+<td>200，items数组，按报名ID倒序</td>
+</tr>
+<tr>
+<td>GET /api/events/{eventId}/my-registration</td>
+<td>有效token</td>
+<td>正整数活动ID</td>
+<td>200，本人该活动的Registration</td>
+</tr>
+</tbody>
+</table>
+<h2>字段与校验</h2>
+<h3>注册与登录</h3>
+<p>注册用户名先trim、转小写，再匹配<code>[a-z][a-z0-9_]{2,31}</code>。displayName先strip，再要求非空、最多32字符。新密码非空，长度8至64字符，UTF-8不超过72字节。字段名中的password不进入返回模型。</p>
+<p>登录也归一化用户名，要求账号和密码非空，分别最多32、64字符；密码超过72字节按登录失败处理。旧演示密码demo123继续有效。成功响应expiresInSeconds为7200。</p>
+<p>PublicUser：id、username、displayName。注册并不自动登录，需要接着调用login。</p>
+<h3>活动与报名</h3>
+<p>Event：id、title、capacity、registeredCount、remainingSeats、myRegistrationId。未报名时myRegistrationId为null；余量至少显示0。</p>
+<p>Registration：id、eventId、eventTitle、userId、username、displayName、createdAt。createdAt为LocalDateTime对应的本地日期时间，不携带时区偏移。</p>
+<p>RegistrationList：<code>{&quot;items&quot;:[...]}</code>。报名正文必须是空对象，身份由后端取得；没有创建活动、管理用户或替别人报名的输入字段。</p>
+<h2>错误格式</h2>
+<pre><code class="language-json">{
+  &quot;code&quot;: &quot;REGISTRATION_NOT_FOUND&quot;,
+  &quot;message&quot;: &quot;没有找到这条报名&quot;,
+  &quot;requestId&quot;: &quot;本次响应中的追踪ID&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>code</th>
+<th>当前含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td>VALIDATION_ERROR</td>
+<td>字段不合格、JSON格式/未知字段、ID格式或非正数</td>
+</tr>
+<tr>
+<td>401</td>
+<td>UNAUTHENTICATED</td>
+<td>登录失败、缺少Bearer、会话失效或用户已不存在</td>
+</tr>
+<tr>
+<td>404</td>
+<td>EVENT_NOT_FOUND</td>
+<td>指定活动不存在</td>
+</tr>
+<tr>
+<td>404</td>
+<td>REGISTRATION_NOT_FOUND</td>
+<td>当前账号没有这条报名；包含其他用户拥有该ID的情况</td>
+</tr>
+<tr>
+<td>404</td>
+<td>NOT_FOUND</td>
+<td>接口或静态资源不存在</td>
+</tr>
+<tr>
+<td>405</td>
+<td>METHOD_NOT_ALLOWED</td>
+<td>请求方法不受支持</td>
+</tr>
+<tr>
+<td>409</td>
+<td>USERNAME_TAKEN</td>
+<td>账号已存在，包括并发注册发生的唯一键冲突</td>
+</tr>
+<tr>
+<td>409</td>
+<td>ALREADY_REGISTERED</td>
+<td>本人已报名</td>
+</tr>
+<tr>
+<td>409</td>
+<td>EVENT_FULL</td>
+<td>活动容量已满</td>
+</tr>
+<tr>
+<td>415</td>
+<td>UNSUPPORTED_MEDIA_TYPE</td>
+<td>请求正文没有使用受支持的JSON媒体类型</td>
+</tr>
+<tr>
+<td>500</td>
+<td>INTERNAL_ERROR</td>
+<td>未预期的服务异常，按requestId查日志</td>
+</tr>
+<tr>
+<td>501</td>
+<td>LAB_SQL_REQUIRED</td>
+<td>课堂SQL常量尚未填写；完整工程的常量已填好</td>
+</tr>
+<tr>
+<td>503</td>
+<td>DATABASE_NOT_READY</td>
+<td>连接、库、表或SQL执行失败</td>
+</tr>
+<tr>
+<td>503</td>
+<td>ACCOUNT_SCHEMA_UPDATE_REQUIRED</td>
+<td>旧库users.id未启用自增，须显式迁移</td>
+</tr>
+</tbody>
+</table>
+<p>这里是控制器及错误处理器的约定。CORS拒绝等框架层响应可能是403或其他格式；不能假定所有失败都返回ApiError。</p>
+<h2>调试链</h2>
+<p>在Apifox环境设置base_url、event_id=10、username=myh、password=demo123。登录提取<code>$.token</code>与<code>$.user.id</code>；报名201后提取<code>$.id</code>为registration_id；后续GET按此ID查询并核对用户与活动。报名失败不能覆盖已保存的有效ID。</p>
+<p>用myh（4）与活动10复现课堂故障：把新控制器的第二个参数传成eventId，会误查用户10而得到404；修成userId后，重建、重启、重登再请求，应查回同一条报名。</p>
+</section><section id="doc-5"><h1>开发规范与任务拆分</h1>
+<p>以下规范用于继续维护这份工程。现有实现作为例子，提交、分支和评审要求是建议的协作约定，不代表仓库已有完整团队流程。</p>
+<h2>代码组织与接口边界</h2>
+<ol>
+<li>Controller接收请求和组织响应，不直接写SQL。新增HTTP入口放在对应Controller，参数和返回字段先同步接口契约。</li>
+<li>Service承载业务规则与事务；涉及容量的检查和写入必须在同一条受控事务路径中完成。</li>
+<li>Repository集中参数化SQL，用问号绑定输入。返回生成ID后再读取对应记录，不猜测自增ID。</li>
+<li>请求和响应分开定义。PublicUser不能混用含passwordHash的内部User模型。</li>
+<li>普通用户的身份从AuthService取得，不信任客户端的userId。按ID查询时还要带当前用户条件。</li>
+<li>错误使用ApiException和既有错误码；新增错误同步接口说明与用例，避免所有异常都返回200。</li>
+<li>配置和密码通过运行环境输入，Java、SQL、截图和日志中不粘贴真实密码或token。</li>
+</ol>
+<h2>命名与数据变更</h2>
+<ul>
+<li>Java方法与变量采用现有camelCase，例如eventId、userId；数据库使用snake_case，例如event_id。</li>
+<li>eventId、userId、registrationId表达不同概念，即使类型同为long也不能互相替代。</li>
+<li>变更表结构时提供编号SQL与验证步骤，不能只改schema.sql后假定旧库自动升级。</li>
+<li>静态页面的config.js决定数据来源；调整独立前端地址时同步核对CORS，避免把纯前端对照变成真正API调用。</li>
+<li>保持完整工程为可运行参考答案；练习工程保留有意设置的断点，不把课堂错误控制器覆盖到完整工程。</li>
+</ul>
+<h2>从需求拆成可评审任务</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>交付物</th>
+<th>依赖</th>
+<th>完成判据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01 需求确认</td>
+<td>R01至R11与验收场景</td>
+<td>无</td>
+<td>注册、重复、容量、查询权限的预期明确</td>
+</tr>
+<tr>
+<td>T02 数据设计</td>
+<td>DDL、种子与迁移脚本</td>
+<td>T01</td>
+<td>三表、键、约束、已有数据升级可说明</td>
+</tr>
+<tr>
+<td>T03 接口约定</td>
+<td>OpenAPI及错误码</td>
+<td>T01</td>
+<td>每条入口输入、身份、返回和失败清楚</td>
+</tr>
+<tr>
+<td>T04 账号能力</td>
+<td>注册、哈希、登录与会话</td>
+<td>T02、T03</td>
+<td>注册可登录，密码不明文保存</td>
+</tr>
+<tr>
+<td>T05 报名能力</td>
+<td>事务、锁、查询权限</td>
+<td>T02至T04</td>
+<td>防重复、防超卖，只查本人</td>
+</tr>
+<tr>
+<td>T06 页面联调</td>
+<td>同源与5500联调配置</td>
+<td>T03至T05</td>
+<td>网页结果与实际接口及SQL对应</td>
+</tr>
+<tr>
+<td>T07 测试</td>
+<td>正常、异常、并发、重启、迁移记录</td>
+<td>T04至T06</td>
+<td>保存真实请求与数据证据</td>
+</tr>
+<tr>
+<td>T08 评审交付</td>
+<td>版本、JAR校验、运行与维护说明</td>
+<td>T07</td>
+<td>源码、契约和交付程序相符</td>
+</tr>
+</tbody>
+</table>
+<p>这些任务按依赖展开，也允许T02与T03讨论后反复调整。当前成品已具备主要代码，后续修改可以沿同一划分提交。</p>
+<h2>一次修改怎样提交</h2>
+<p>为一个明确问题创建分支，例如<code>feat/account-registration</code>或<code>fix/my-registration-user-id</code>。提交说明写清触发条件与结果，例如“修正按活动查询本人报名时传错用户参数”。不把无关页面调整和数据库变更混进同一修错。</p>
+<p>建议PR正文包含：改动行为、涉及入口/表/配置、验证结果、迁移与回退要求。没有运行的检查写明未运行，截图不能替代数据库和权限断言。</p>
+<h2>评审检查表</h2>
+<ul>
+<li>[ ] 需求编号、实现、OpenAPI与测试用例一致。</li>
+<li>[ ] 注册不回传密码；登录态和本人查询条件正确。</li>
+<li>[ ] 容量检查和写入没有分离；新增SQL仍绑定参数。</li>
+<li>[ ] 新旧数据库路径都考虑了，迁移脚本没有清空既有记录。</li>
+<li>[ ] 未提交target、真实连接密码、会话token和测试数据库文件。</li>
+<li>[ ] 完整工程与练习工程的差别仍符合课堂安排。</li>
+<li>[ ] 实际构建运行过所提交版本，说明剩余限制。</li>
+</ul>
+<p>当前源码没有提交Maven单元测试与CI配置，依赖既有外部验证脚本及人工操作。上面的检查表应执行后勾选，不能因有文档就视为已经通过。</p>
+</section><section id="doc-6"><h1>测试计划与验证记录</h1>
+<h2>状态说明</h2>
+<p>本目录整理测试方案并复制既有证据，没有再次启动MySQL、安装环境或重跑业务测试。历史通过结论只覆盖原记录中的版本和范围，不能把不同日期的数量相加，当成当前源码的全量测试结果。</p>
+<table>
+<thead>
+<tr>
+<th>原记录日期</th>
+<th>记录</th>
+<th>结果与范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-10-28</td>
+<td><a href="%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95/2026-10-28_%E5%AE%8C%E6%95%B4%E5%B7%A5%E7%A8%8B%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E6%A0%B8%E9%AA%8C.json">完整工程与浏览器核验</a></td>
+<td>36项；注册功能加入前的登录、报名、查询权限、并发与两版页面对照</td>
+</tr>
+<tr>
+<td>2026-10-28</td>
+<td><a href="%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95/2026-10-28_%E7%BB%83%E4%B9%A0%E6%AD%A5%E9%AA%A4%E6%A0%B8%E9%AA%8C.json">练习步骤核验</a></td>
+<td>18项；未建表、补SQL、新接口错误与修正阶段</td>
+</tr>
+<tr>
+<td>2026-10-30</td>
+<td><a href="%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95/2026-10-30_%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD%E6%A0%B8%E9%AA%8C.json">注册功能核验</a></td>
+<td>42项；注册校验、唯一性、并发注册、哈希、重启持久化及旧库迁移等</td>
+</tr>
+<tr>
+<td>2026-10-30</td>
+<td><a href="%E9%AA%8C%E8%AF%81%E8%AE%B0%E5%BD%95/2026-10-30_%E8%81%94%E8%B0%83%E4%B8%8E%E6%B3%A8%E5%86%8C%E6%A0%B8%E9%AA%8C.json">联调与注册核验</a></td>
+<td>17项；实际HTTP、CORS、浏览器和隔离MySQL；未代点IDEA界面</td>
+</tr>
+</tbody>
+</table>
+<p>测试所用13316或13326是独立验证实例端口，不是学生必须配置的生产或课堂端口。临时测试数据库可重建，不能用保存的PID文件判断某个实例现在仍在运行。</p>
+<h2>重跑前准备</h2>
+<p>选择专用测试库，导入对应DDL与种子，记录源码哈希、JDK、MySQL、构建命令与运行端口。不要在已有个人数据的库上直接执行历史测试脚本，它们包含清理测试报名的SQL。</p>
+<p>容量1场景使用活动1，接口与myh参数场景使用活动10。每次重启后重新取得token，真实报名ID从响应提取，不假定从1连续生成。</p>
+<h2>回归用例</h2>
+<table>
+<thead>
+<tr>
+<th>用例</th>
+<th>对应需求</th>
+<th>操作</th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01 合法注册</td>
+<td>R01、R02</td>
+<td>新用户名、称呼、合法密码</td>
+<td>201；PublicUser；无密码、哈希或token；库中为BCrypt</td>
+</tr>
+<tr>
+<td>C02 注册字段边界</td>
+<td>R01、R02</td>
+<td>归一化账号、非法字符、短密码、超72字节、空称呼</td>
+<td>按规则接受或400；不产生非法账号</td>
+</tr>
+<tr>
+<td>C03 同名并发注册</td>
+<td>R01</td>
+<td>两个请求同时创建同一新用户名</td>
+<td>一个201，一个409 USERNAME_TAKEN；只落一行</td>
+</tr>
+<tr>
+<td>C04 登录身份</td>
+<td>R03</td>
+<td>正确、错误、空密码；缺少或伪造token</td>
+<td>正确200，其余400或401；/me不返回密码</td>
+</tr>
+<tr>
+<td>C05 活动查询</td>
+<td>R04</td>
+<td>已知、不存在、非正数及非数字ID</td>
+<td>200、404或400，与错误码对应</td>
+</tr>
+<tr>
+<td>C06 创建并查询</td>
+<td>R05、R09</td>
+<td>myh报名活动10，按返回ID查</td>
+<td>201；ID、活动、用户一致，Location指向记录</td>
+</tr>
+<tr>
+<td>C07 冒用身份</td>
+<td>R05、R08</td>
+<td>报名正文带userId；另一用户查询此ID</td>
+<td>未知字段400；他人查询404</td>
+</tr>
+<tr>
+<td>C08 重复报名</td>
+<td>R06</td>
+<td>同一用户同一活动再次POST</td>
+<td>409 ALREADY_REGISTERED，不新增行</td>
+</tr>
+<tr>
+<td>C09 最后一个名额</td>
+<td>R07</td>
+<td>清空测试活动1，两个账号并发POST</td>
+<td>一个201，一个409 EVENT_FULL，数据库仅一行</td>
+</tr>
+<tr>
+<td>C10 重启持久化</td>
+<td>R10</td>
+<td>保存记录、重启Java、用旧token及重新登录查询</td>
+<td>旧token401；新登录能查原账号和报名</td>
+</tr>
+<tr>
+<td>C11 退出</td>
+<td>R03</td>
+<td>退出有效token，再查/me；重复退出格式正确的token</td>
+<td>204、401；再次退出仍可204</td>
+</tr>
+<tr>
+<td>C12 旧库升级</td>
+<td>R01、R10</td>
+<td>用无自增users.id的测试旧库注册，迁移后重试</td>
+<td>迁移前503 ACCOUNT_SCHEMA_UPDATE_REQUIRED；迁移后201，旧数据保留</td>
+</tr>
+<tr>
+<td>C13 本机跨域</td>
+<td>R11</td>
+<td>5500来源预检和业务请求；5501或其他来源请求</td>
+<td>允许配置来源，拒绝其他来源；拒绝不一定返回业务JSON</td>
+</tr>
+<tr>
+<td>C14 课堂错误参数</td>
+<td>R09</td>
+<td>练习控制器将第二参数传为活动10，再改userId=4</td>
+<td>修错前404，重建重登后200且为同一条记录</td>
+</tr>
+</tbody>
+</table>
+<h2>证据记录格式</h2>
+<p>一次测试至少记录：用例编号、基线哈希、前置数据、操作、期望、实际状态与code、数据库查询结果、执行人及日期。错误时保留requestId，避免截图中出现真实密码或token。</p>
+<p>自动检查脚本<a href="../apifox%E7%9B%B8%E5%85%B3/%E8%87%AA%E5%8A%A8%E6%A3%80%E6%9F%A5.ps1">资料/自动检查.ps1</a>覆盖登录、报名和本人查询链，可以复跑ALREADY_REGISTERED分支，但不能替代本表中的并发、迁移和所有边界测试。Maven使用-DskipTests构建成功也不等于这些测试已通过。</p>
+<h2>当前待验证项目</h2>
+<p>当前源码基线还需要按上表完成一次统一回归并记录结果。没有已知证据支持生产负载测试、持续集成、备份恢复演练、跨时区处理或完整安全审计，不能写成已通过。</p>
+</section><section id="doc-7"><h1>评审发布与维护手册</h1>
+<p>当前交付方式是本机运行JAR及静态网页，没有实际生产部署或自动发布流水线。以下给出与现有项目相符的操作与检查，评审人、执行日期和结果应在真正执行时填写。</p>
+<h2>构建与配置</h2>
+<p>在完整工程目录执行：</p>
+<pre><code class="language-powershell">.\mvnw.cmd -DskipTests package
+</code></pre>
+<p>产物是target/signup-classroom-1.0.0.jar。Java编译目标21，依赖版本以pom.xml及Maven解析结果为准，当前Spring Boot为4.1.2。构建参数跳过测试，测试要单独按计划执行。</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>完整工程默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DB_HOST</td>
+<td>127.0.0.1</td>
+<td>MySQL主机</td>
+</tr>
+<tr>
+<td>DB_PORT</td>
+<td>3306</td>
+<td>MySQL端口</td>
+</tr>
+<tr>
+<td>DB_NAME</td>
+<td>signup_demo</td>
+<td>练习工程默认为signup_lab</td>
+</tr>
+<tr>
+<td>DB_USER</td>
+<td>workshop</td>
+<td>课堂数据库用户</td>
+</tr>
+<tr>
+<td>DB_PASSWORD</td>
+<td>空</td>
+<td>实际运行必须填自己设置的密码</td>
+</tr>
+<tr>
+<td>DB_INIT</td>
+<td>always</td>
+<td>完整工程自动运行schema.sql与data.sql；练习默认为never</td>
+</tr>
+<tr>
+<td>SERVER_PORT</td>
+<td>8080</td>
+<td>练习默认8081</td>
+</tr>
+</tbody>
+</table>
+<p>服务固定监听127.0.0.1，未提供改变监听地址的环境变量。不能仅修改端口就视为已部署公网。</p>
+<h2>本机启动</h2>
+<p>先按00脚本准备数据库与workshop权限，已有旧库另执行03迁移。以下命令在完整工程目录运行，值换成自己的实际配置：</p>
+<pre><code class="language-powershell">$env:DB_HOST='127.0.0.1'
+$env:DB_PORT='3306'
+$env:DB_NAME='signup_demo'
+$env:DB_USER='workshop'
+$env:DB_PASSWORD='自己的课堂数据库密码'
+java -jar target/signup-classroom-1.0.0.jar
+</code></pre>
+<p>也可双击材料根目录的快速启动/运行完整工程.cmd，交互输入连接信息。若更新完整工程源码，必须重新构建并核对快捷启动目录里的JAR，不能假定它会自动跟随源码变化。</p>
+<p>健康检查GET /health为200只说明Java进程能响应。随后应登录、查活动、进行一次受控报名并查库，才覆盖数据库和业务路径。</p>
+<h2>评审与交付清单</h2>
+<ul>
+<li>[ ] 记录源码基线、JAR SHA256和实际构建环境。</li>
+<li>[ ] 对照需求、OpenAPI、DDL和回归用例，完成一次当前版本验证。</li>
+<li>[ ] 若有迁移，记录目标库、备份位置、执行人和迁移后结果。</li>
+<li>[ ] 记录是否同时更新快速启动JAR及独立前端文件。</li>
+<li>[ ] 不把个人密码、测试数据库目录和浏览器缓存放进交付材料。</li>
+<li>[ ] 留下本次修改说明、已知限制与回退操作。</li>
+</ul>
+<p>仓库版本号尚未区分注册功能加入前后，因此本次应同时记录日期与源码/JAR哈希。后续发布建议同步更新版本号，不只重命名JAR。</p>
+<h2>前后端分开联调</h2>
+<p>VS Code打开项目工程/前后端/fronted，用Live Server启动在http://127.0.0.1:5500；config.js默认请求http://127.0.0.1:8080/api，后端用8080启动。若改后端端口，同时改apiBase；若改前端端口，同时核对CORS允许来源。</p>
+<p>纯前端对照可使用5501，它只演示本机状态，不应该给它放开后端跨域来“修复”对照实验。</p>
+<h2>回退</h2>
+<p>应用修改前保留已验证的上一份JAR及哈希。停止当前进程、换回旧JAR、用相同数据库配置启动，再进行登录与查询冒烟测试。每次Java重启都会清空会话，用户需要重新登录。</p>
+<p>03迁移没有提供自动回退脚本。若旧代码与新增自增列兼容，可保留结构再退应用；若不兼容，应根据备份制定数据恢复方案。不要用DROP或删除数据库代替回退，也不要直接覆盖有新报名的数据。</p>
+<h2>运行与定位</h2>
+<p>RequestLogFilter输出requestId、方法、路径、状态、elapsedMs。数据库异常日志带requestId及异常类型；未预期错误记录堆栈。没有专用日志文件或日志轮转配置，默认观察Java控制台。</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>操作顺序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>端口占用</td>
+<td>找到自己之前的运行窗口并停止；不随意结束其他服务</td>
+</tr>
+<tr>
+<td>401</td>
+<td>检查Bearer、到期和服务是否刚重启，重新登录</td>
+</tr>
+<tr>
+<td>404</td>
+<td>先区分NOT_FOUND、EVENT_NOT_FOUND和REGISTRATION_NOT_FOUND</td>
+</tr>
+<tr>
+<td>409</td>
+<td>区分用户名占用、本人重复和活动满员</td>
+</tr>
+<tr>
+<td>503</td>
+<td>对照连接、库名、权限、建表与迁移；结合requestId查看日志</td>
+</tr>
+<tr>
+<td>网页数据没更新</td>
+<td>确认端口、库、运行的JAR及前端apiBase，修改后重新构建启动</td>
+</tr>
+</tbody>
+</table>
+<p>进一步公网运行需要另行设计身份与会话、HTTPS、配置管理、访问限制、日志监控和备份恢复。它们属于后续建设，不能当成当前项目已具备的运维能力。</p>
+</section><section id="doc-8"><h1>追踪矩阵与现状差距</h1>
+<p>本表把需求、实现和验收连接起来。源码基线见10文件；C编号对应测试计划。源码存在表示已实现，不自动代表该项已经在本次整理中重跑通过。</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>主要入口与实现</th>
+<th>数据依据</th>
+<th>对应用例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R01 账号唯一</td>
+<td>POST /api/auth/register；AuthService.createAccount、Repository.createUser</td>
+<td>users.username UNIQUE</td>
+<td>C01、C02、C03</td>
+</tr>
+<tr>
+<td>R02 密码与字段</td>
+<td>Models.CreateAccountRequest、AuthService字节检查与BCrypt</td>
+<td>users.password_hash；API称呼32字符，列50字符</td>
+<td>C01、C02</td>
+</tr>
+<tr>
+<td>R03 登录凭证</td>
+<td>/auth/login、/auth/logout、/me；AuthService会话表</td>
+<td>Java进程内映射</td>
+<td>C04、C11</td>
+</tr>
+<tr>
+<td>R04 活动查看</td>
+<td>GET /events/{eventId}；SignupService.event</td>
+<td>events、报名计数、本人记录</td>
+<td>C05</td>
+</tr>
+<tr>
+<td>R05 身份不可指定</td>
+<td>Controller调用auth.require，RegistrationRequest为空record</td>
+<td>user_id来自已登录用户</td>
+<td>C06、C07</td>
+</tr>
+<tr>
+<td>R06 不重复</td>
+<td>Service先检查本人记录</td>
+<td>uk_event_user</td>
+<td>C08</td>
+</tr>
+<tr>
+<td>R07 不超卖</td>
+<td>Service.register事务，Repository.lockEvent</td>
+<td>InnoDB活动行锁与事务内COUNT、INSERT</td>
+<td>C09</td>
+</tr>
+<tr>
+<td>R08 本人权限</td>
+<td>findOwned按id与user_id查询</td>
+<td>registrations关联当前用户</td>
+<td>C07</td>
+</tr>
+<tr>
+<td>R09 列表与活动查询</td>
+<td>/me/registrations、/events/{eventId}/my-registration</td>
+<td>findMine、findForEventAndUser</td>
+<td>C06、C14</td>
+</tr>
+<tr>
+<td>R10 持久化</td>
+<td>数据库插入与查询；会话在内存</td>
+<td>三张InnoDB表、03迁移</td>
+<td>C10、C12</td>
+</tr>
+<tr>
+<td>R11 本机联调</td>
+<td>LocalFrontendCorsConfig、独立前端config.js</td>
+<td>来源白名单与Bearer头</td>
+<td>C13</td>
+</tr>
+</tbody>
+</table>
+<h2>为课堂保留的差异</h2>
+<p>完整工程是答案基线；练习工程的FIND_EVENT_SQL、INSERT_REGISTRATION_SQL可能为空，且学生需要手动添加新控制器。纯前端账号与报名的保存方式也不同，不能把它的行为写进真实后端需求。</p>
+<p>新控制器要传<code>service.myRegistration(eventId,userId)</code>。课堂错误版把两个参数都写成eventId，属于练习故障，不是完整工程的预期功能。</p>
+<h2>已实现与尚未建设</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>当前事实</th>
+<th>后续处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册、登录、本人报名</td>
+<td>已有代码、表和历史验证</td>
+<td>按当前源码做一次统一回归</td>
+</tr>
+<tr>
+<td>本机页面与跨域联调</td>
+<td>支持同源及5500前端</td>
+<td>改端口前核对配置与来源</td>
+</tr>
+<tr>
+<td>单活动容量保护</td>
+<td>已有事务与行锁</td>
+<td>保持所有报名写入走同一路径，增加不同容量回归</td>
+</tr>
+<tr>
+<td>数据库升级</td>
+<td>有手工03迁移</td>
+<td>后续引入迁移版本管理与恢复演练</td>
+</tr>
+<tr>
+<td>代码评审与分支管理</td>
+<td>本目录提供建议规范</td>
+<td>真正执行并保存提交、PR及评审结果</td>
+</tr>
+<tr>
+<td>持续集成与单元测试</td>
+<td>当前未提交对应配置与测试源码</td>
+<td>分别补业务、权限、并发和构建检查</td>
+</tr>
+<tr>
+<td>会话与身份</td>
+<td>本机内存token，重启失效</td>
+<td>多实例运行前重新设计共享会话与安全配置</td>
+</tr>
+<tr>
+<td>活动管理、撤销、支付</td>
+<td>没有相关入口</td>
+<td>先定义新需求、契约与迁移，不能假定已有</td>
+</tr>
+<tr>
+<td>运维与生产发布</td>
+<td>本机控制台日志、健康检查</td>
+<td>明确监控、备份、恢复与发布流程后再上线</td>
+</tr>
+</tbody>
+</table>
+<p>逆向文档能还原当前行为，但不会补出真实的需求会议、历史评审签字或生产发布记录。需要展示传统开发流程时，可以把这些文档当作各阶段交付物；实际项目则要在发生变更时同步维护。</p>
+</section></main><script>document.querySelectorAll('table').forEach(t=>{const w=document.createElement('div');w.className='table-wrap';t.before(w);w.append(t);});</script></body></html>

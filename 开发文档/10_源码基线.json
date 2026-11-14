@@ -1,0 +1,214 @@
+{
+  "document_date": "2026-11-13",
+  "application_version": "1.0.0",
+  "scope": "当前分发数据库后端与前端；8080，活动1；仅文件、配置与契约核对",
+  "route_count": 10,
+  "files": [
+    {
+      "path": "项目工程/前后端/backend/.gitignore",
+      "sha256": "f7b0e2b95d7f67e0ef47ae7570218d656bb5cd31b9d4a2acabec7793de1480f3",
+      "bytes": 35
+    },
+    {
+      "path": "项目工程/前后端/backend/.mvn/wrapper/maven-wrapper.jar",
+      "sha256": "4e2fbf6554bc8a4702cdfdd3bef464f423393d784ddbb037216320ce55d5e4e1",
+      "bytes": 63093
+    },
+    {
+      "path": "项目工程/前后端/backend/.mvn/wrapper/maven-wrapper.properties",
+      "sha256": "071fe81d69071c8c43431aa2c507b640cd5424c7005eb3e64d5f25e66099b4fd",
+      "bytes": 281
+    },
+    {
+      "path": "项目工程/前后端/backend/mvnw",
+      "sha256": "07e72ac35ecf8c24db67498fc6a9a8e7c64b31ab3798a7119fe73fb7cd6c0331",
+      "bytes": 11336
+    },
+    {
+      "path": "项目工程/前后端/backend/mvnw.cmd",
+      "sha256": "8c720db91d96ba5f67afa4083726b20eb4be399d86bb859e09eb67436bb230f5",
+      "bytes": 7903
+    },
+    {
+      "path": "项目工程/前后端/backend/pom.xml",
+      "sha256": "cac68f089a606dceabea9be9937e5b3ed8f972fd4e1b4b3cc5b70c861242a5e5",
+      "bytes": 1386
+    },
+    {
+      "path": "项目工程/前后端/backend/README.md",
+      "sha256": "494efe2e36678c8ce1c88058eac9248e7164ceeb3472822de6bca470d67abb35",
+      "bytes": 1601
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/00_准备数据库.sql",
+      "sha256": "0f4a9c6b0607705a91bbd83487b6c9c219e6d4ee607a4a766eff62a540284c54",
+      "bytes": 791
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/01_schema.sql",
+      "sha256": "f45aa01f4fe771b7fedef992e7c803bfa2fa5ec2651ee4cc3596ddfe1190f15e",
+      "bytes": 1014
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/02_seed.sql",
+      "sha256": "cd9549255ebffb2d4cea91eea76ea78f9fe8fa85db6b10a47a85ace711ed4fd9",
+      "bytes": 751
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/03_已有数据库启用注册.sql",
+      "sha256": "de49dc7b64c69d2a582314797929bfab28223b19f18dff0a9631169673fe69b3",
+      "bytes": 630
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/90_重置开场活动.sql",
+      "sha256": "5ecad2dd1be1a50c72eead5334693dba2e9ffdcb3298d5cfbd979921f55448ac",
+      "bytes": 331
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/91_重置接口练习.sql",
+      "sha256": "956f551b7918154026edfe45f804c398b6f84547560c0f083168a0a5cd1fe7d7",
+      "bytes": 190
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/ApiErrorHandler.java",
+      "sha256": "3c213b18840a681395111359901f49e720ba1122cb35d690b3980be676e82bae",
+      "bytes": 3806
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/ApiException.java",
+      "sha256": "2e8c293e6fb0da453ba90d640f8fe0a1a8c0b36fc3db1978f2cac08b8da50e5d",
+      "bytes": 255
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/AuthService.java",
+      "sha256": "586de956bff4dafd636e5b3c96cc3e99d6e5d87fa935717643b760db59cadbb7",
+      "bytes": 3848
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/LocalFrontendCorsConfig.java",
+      "sha256": "d765716b0efa844d6f7f9a6ba0d9130a05eb45e9b9706e3391c5aec7849ae7f0",
+      "bytes": 817
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/Models.java",
+      "sha256": "015d40e94dc7e0681884e5c770bfe185452ba20db16284ff11cdb0a2aec7cf80",
+      "bytes": 1918
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/MyRegistrationController.java",
+      "sha256": "73d8cb23db714486e2156e62847c483bff6e2fd3e8732bf33bac7b8574197074",
+      "bytes": 678
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/RequestLogFilter.java",
+      "sha256": "acff832aecfdb40c4ea0168c828af965b46c68fb0017084decc8784abe42e820",
+      "bytes": 1204
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/SignupApplication.java",
+      "sha256": "ad84ab9a140c47238a70e0160acf218cc962f08e00fcf0636581e24cfb5de884",
+      "bytes": 306
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/SignupController.java",
+      "sha256": "6118adfc16ad4df80b4694fe609019146258d72de660b6ec4a6bb63c8ee61723",
+      "bytes": 2196
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/SignupRepository.java",
+      "sha256": "b3d608147d7ffef66025d132d1650f346fc5a375cdcfc1bd06a237be98a08115",
+      "bytes": 4721
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/java/cn/meeting/signup/SignupService.java",
+      "sha256": "f0f6664d966f15c39985163f34a49cd8814fe99df4079c339ad86b8e4414a898",
+      "bytes": 2380
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/application.yml",
+      "sha256": "290ee03b69b6937d2dea07f9fe0efb1e20c7c3ed174e6cf02393d2766507ddcc",
+      "bytes": 537
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/data.sql",
+      "sha256": "cd9549255ebffb2d4cea91eea76ea78f9fe8fa85db6b10a47a85ace711ed4fd9",
+      "bytes": 751
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/schema.sql",
+      "sha256": "f45aa01f4fe771b7fedef992e7c803bfa2fa5ec2651ee4cc3596ddfe1190f15e",
+      "bytes": 1014
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/static/app.js",
+      "sha256": "f3323fe587b7f93b7c349a56c544081cea067addaa7c4c8ed730c14921f6596f",
+      "bytes": 13676
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/static/config.js",
+      "sha256": "0d9aa061ae618289c41e21fec0ac45c484523729e5caa52054387edf2e09e29b",
+      "bytes": 66
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/static/index.html",
+      "sha256": "f0fb1a984cbacf8cdfc432da40da6588c54f7bf106e8cf4a3c984d11b11ee021",
+      "bytes": 884
+    },
+    {
+      "path": "项目工程/前后端/backend/src/main/resources/static/styles.css",
+      "sha256": "5bd923e64a09704c5e93c15a78356226e3b36571c683799042c2ec8c17fae395",
+      "bytes": 8116
+    },
+    {
+      "path": "项目工程/前后端/backend/注册功能说明.md",
+      "sha256": "69e00907d4093692eee88bffe8100fb35a002bc4fdcc3fd1012bdbe4cb2caf6d",
+      "bytes": 1980
+    },
+    {
+      "path": "项目工程/前后端/backend/sql/04_新增演示账号.sql",
+      "sha256": "e96e145150653fa069a4e6c4887e6d91cbb27d34c6fcb1d54dbec322b98d4ce9",
+      "bytes": 714
+    },
+    {
+      "path": "项目工程/前后端/backend/课堂文件/RegistrationStatusController.正确.java.txt",
+      "sha256": "193e1ae86af69bdacc692eea017a438bbbe91f20d525c392904fe65491b537eb",
+      "bytes": 706
+    },
+    {
+      "path": "项目工程/前后端/backend/课堂文件/RegistrationStatusController.错误.java.txt",
+      "sha256": "065cc3315a73e3a2fc1ca2d1e09103d4d4cf04da267eb99f86ab85f934cbbd63",
+      "bytes": 707
+    }
+  ],
+  "jar": {
+    "present": true,
+    "sha256": "d87e7002c7de6f6e48177e8e0eb6c66c2c288d7a7472f86148a67cc566fe7db7",
+    "bytes": 25619685,
+    "scope": "记录现有JAR哈希；资源与源码的核对结果见当前检查报告，未重跑数据库测试。",
+    "resources_match_source": true,
+    "resource_mismatches": []
+  },
+  "evidence": [
+    {
+      "original": "资料/完整工程与浏览器核验.json",
+      "snapshot": "验证记录/2026-10-28_完整工程与浏览器核验.json",
+      "sha256": "85fa74bb76de83e91468349426d18599cd4a88425d5e4fa4b4317548e54bd6aa"
+    },
+    {
+      "original": "资料/练习步骤核验.json",
+      "snapshot": "验证记录/2026-10-28_练习步骤核验.json",
+      "sha256": "b9f5bea2870ca0c129666e7b282b28970991359ef524f50577a785f221a48fb0"
+    },
+    {
+      "original": "work/2026-10-30-register/注册功能核验.json",
+      "snapshot": "验证记录/2026-10-30_注册功能核验.json",
+      "sha256": "a66d0a746154aa7409e9f62012a241d9253ae57c2a619caee877522dd87fa5da"
+    },
+    {
+      "original": "work/IDEA修订/联调与注册核验.json",
+      "snapshot": "验证记录/2026-10-30_联调与注册核验.json",
+      "sha256": "6ce4c68cc8a49164679ab4a964cd3ce8aea602ddacf5a68429d47376a47333f2"
+    }
+  ],
+  "path_base": "material"
+}
